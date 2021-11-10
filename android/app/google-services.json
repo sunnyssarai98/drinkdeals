@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "233505410452",
+    "project_id": "drinkdeals-2c8c1",
+    "storage_bucket": "drinkdeals-2c8c1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:233505410452:android:1fa81eb1b3ec28d61f9381",
+        "android_client_info": {
+          "package_name": "com.ssarai.drink_deals"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "233505410452-rivci55hamn8uso3g1p0m8gf731die87.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMMf5lGm8n7tGgrSMGVqyQ8eZAwScBEhs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "233505410452-rivci55hamn8uso3g1p0m8gf731die87.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
