@@ -11,10 +11,12 @@ class SignIn extends StatefulWidget {
 
 class _SignInState extends State<SignIn> {
   final AuthService _auth = AuthService();
+  final _formKey = GlobalKey<FormState>();
 
   //text field state
   String email = '';
   String password = '';
+  String errorMSG = '';
 
   @override
   Widget build(BuildContext context) {
@@ -38,36 +40,57 @@ class _SignInState extends State<SignIn> {
           child: Column(
             children: [
               Form(
+                  key: _formKey,
                   child: Column(children: <Widget>[
-                SizedBox(height: 20),
-                TextFormField(onChanged: (val) {
-                  setState(() => email = val);
-                }),
-                SizedBox(height: 20),
-                TextFormField(
-                    obscureText: true,
-                    onChanged: (val) {
-                      setState(() => password = val);
-                    }),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  child: Text('sign in'),
-                  style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(Colors.pink[400]),
-                      textStyle: MaterialStateProperty.all(
-                          TextStyle(color: Colors.white))),
-                  onPressed: () async {},
-                )
-              ])),
+                    SizedBox(height: 20),
+                    TextFormField(
+                        validator: (val) =>
+                            val!.isEmpty ? 'Please enter an e-mail' : null,
+                        onChanged: (val) {
+                          setState(() => email = val);
+                        }),
+                    SizedBox(height: 20),
+                    TextFormField(
+                        obscureText: true,
+                        validator: (val) => val!.length < 7
+                            ? 'Please enter a password with 7+ characters'
+                            : null,
+                        onChanged: (val) {
+                          setState(() => password = val);
+                        }),
+                    SizedBox(height: 20),
+                    ElevatedButton(
+                      child: Text('sign in'),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.pink[400]),
+                          textStyle: MaterialStateProperty.all(
+                              TextStyle(color: Colors.white))),
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          dynamic result = await _auth
+                              .signInWithEmailAndPassword(email, password);
+                          if (result == null) {
+                            setState(() => errorMSG =
+                                'Could not sign in with email/username.');
+                          }
+                        }
+                      },
+                    ),
+                    SizedBox(height: 12.0),
+                    Text(
+                      errorMSG,
+                      style: TextStyle(color: Colors.red, fontSize: 20),
+                    )
+                  ])),
               ElevatedButton(
-                  child: Text('Sign in anon'),
+                  child: Text('Continue as guest'),
                   onPressed: () async {
                     dynamic result = await _auth.signInAnon();
                     if (result == null) {
-                      print('error signing in');
+                      print('');
                     } else {
-                      print('signed in');
+                      print('');
                       print(result);
                     }
                   }),
