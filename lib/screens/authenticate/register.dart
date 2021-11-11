@@ -1,15 +1,15 @@
-import 'package:drink_deals/services/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:drink_deals/services/auth.dart';
 
-class SignIn extends StatefulWidget {
+class Register extends StatefulWidget {
   final Function toggleView;
-  SignIn({required this.toggleView});
+  Register({required this.toggleView});
 
   @override
-  _SignInState createState() => _SignInState();
+  _RegisterState createState() => _RegisterState();
 }
 
-class _SignInState extends State<SignIn> {
+class _RegisterState extends State<Register> {
   final AuthService _auth = AuthService();
 
   //text field state
@@ -24,11 +24,11 @@ class _SignInState extends State<SignIn> {
       appBar: AppBar(
           backgroundColor: Colors.purple[500],
           elevation: 0.0,
-          title: Text('Welcome To Drink Deals'),
+          title: Text('Sign Up To Drink Deals'),
           actions: <Widget>[
             TextButton.icon(
                 icon: Icon(Icons.person),
-                label: Text('Register'),
+                label: Text('Sign In'),
                 onPressed: () {
                   widget.toggleView();
                 })
@@ -51,7 +51,7 @@ class _SignInState extends State<SignIn> {
                     }),
                 SizedBox(height: 20),
                 ElevatedButton(
-                  child: Text('sign in'),
+                  child: Text('register'),
                   style: ButtonStyle(
                       backgroundColor:
                           MaterialStateProperty.all(Colors.pink[400]),
