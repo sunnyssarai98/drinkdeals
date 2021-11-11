@@ -16,25 +16,25 @@ class _SignInState extends State<SignIn> {
     return Scaffold(
       backgroundColor: Colors.purple[100],
       appBar: AppBar(
-        backgroundColor: Colors.purple[200],
+        backgroundColor: Colors.purple[500],
         elevation: 0.0,
-        title: Text('Welcome To Drink Deals'),
+        title: Center(child: Text('Welcome To Drink Deals')),
       ),
       body: Container(
           padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
-          child: ElevatedButton(
-            child: Text('Sign in anon'),
-            onPressed: () async {
-              dynamic result = await _auth.signInAnon();
-              if (result == null){
-                print('error signing in');
-              } else{
-                print('signed in');
-                print(result);
-              }
-            }
-          )
-        ),
+          child: Center(
+            child: ElevatedButton(
+                child: Text('Sign in anon'),
+                onPressed: () async {
+                  dynamic result = await _auth.signInAnon();
+                  if (result == null) {
+                    print('error signing in');
+                  } else {
+                    print('signed in');
+                    print(result);
+                  }
+                }),
+          )),
     );
   }
 }
