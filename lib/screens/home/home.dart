@@ -116,7 +116,7 @@ class _AccountScreenState extends State<AccountScreen> {
             children: <Widget>[
               Center(
                 child: CircleAvatar(
-                  backgroundImage: AssetImage('assets/logo.png'),
+                  backgroundImage: AssetImage('assets/user.png'),
                   radius: 40.0,
                 ),
               ),
@@ -177,7 +177,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 ),
                 trailing: InkWell(
                     child: CircleAvatar(
-                  backgroundImage: AssetImage('assets/logo.png'),
+                  backgroundImage: AssetImage('assets/freds.png'),
                 )),
               )),
               Card(
@@ -186,7 +186,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 title: Text(deals[1].barName + '\t - \t' + deals[1].deal),
                 trailing: InkWell(
                     child: CircleAvatar(
-                  backgroundImage: AssetImage('assets/logo.png'),
+                  backgroundImage: AssetImage('assets/mikes.png'),
                 )),
               )),
               Card(
@@ -195,7 +195,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   title: Text(deals[2].barName + '\t - \t' + deals[2].deal),
                   trailing: InkWell(
                       child: CircleAvatar(
-                    backgroundImage: AssetImage('assets/logo.png'),
+                    backgroundImage: AssetImage('assets/reggies.png'),
                   )),
                 ),
               ),
