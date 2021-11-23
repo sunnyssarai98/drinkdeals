@@ -1,7 +1,6 @@
 import 'package:drink_deals/screens/authenticate/register.dart';
 import 'package:drink_deals/screens/authenticate/sign_in.dart';
 import 'package:flutter/material.dart';
-import 'package:drink_deals/screens/authenticate/register.dart';
 
 class Authenticate extends StatefulWidget {
   const Authenticate({Key? key}) : super(key: key);

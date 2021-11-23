@@ -1,4 +1,5 @@
 import 'package:drink_deals/services/auth.dart';
+import 'package:drink_deals/shared/constants.dart';
 import 'package:flutter/material.dart';
 
 class SignIn extends StatefulWidget {
@@ -36,14 +37,19 @@ class _SignInState extends State<SignIn> {
                 })
           ]),
       body: Container(
-          padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+          padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 50.0),
           child: Column(
             children: [
+              Image(
+                height: 125.0,
+                image: AssetImage('assets/logo.png'),
+              ),
               Form(
                   key: _formKey,
                   child: Column(children: <Widget>[
-                    SizedBox(height: 20),
                     TextFormField(
+                        decoration:
+                            textInputDecoration.copyWith(hintText: 'email'),
                         validator: (val) =>
                             val!.isEmpty ? 'Please enter an e-mail' : null,
                         onChanged: (val) {
@@ -51,6 +57,8 @@ class _SignInState extends State<SignIn> {
                         }),
                     SizedBox(height: 20),
                     TextFormField(
+                        decoration:
+                            textInputDecoration.copyWith(hintText: 'password'),
                         obscureText: true,
                         validator: (val) => val!.length < 7
                             ? 'Please enter a password with 7+ characters'

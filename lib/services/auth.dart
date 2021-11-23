@@ -1,4 +1,5 @@
 import 'package:drink_deals/models/myuser.dart';
+import 'package:drink_deals/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
@@ -49,6 +50,11 @@ class AuthService {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       User? user = result.user;
+
+      if (user != null) {
+        await DatabaseService(uid: user.uid).updateUserDrinks([]);
+      }
+
       return _userFromFirebaseUser(user!);
     } on FirebaseAuthException catch (e) {
       print(e.toString());
