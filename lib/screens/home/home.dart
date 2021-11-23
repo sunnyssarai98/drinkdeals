@@ -1,8 +1,10 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+// import 'dart:html';
+
+import 'package:drink_deals/screens/home/deal.dart';
 import 'package:drink_deals/services/auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -14,10 +16,11 @@ class _HomeState extends State<Home> {
 
   int _currentIndex = 0;
 
+  // Deal d1 = deals[1];
   var tabs = [
     Center(child: Text('Home')),
-    MapScreen(),
-    Center(child: Text('Account')),
+    Center(child: Text('Map')),
+    AccountScreen(),
   ];
 
   @override
@@ -72,25 +75,137 @@ class _HomeState extends State<Home> {
   }
 }
 
-class MapScreen extends StatefulWidget {
-  const MapScreen({Key? key}) : super(key: key);
+class AccountScreen extends StatefulWidget {
+  const AccountScreen({Key? key}) : super(key: key);
 
   @override
-  _MapScreenState createState() => _MapScreenState();
+  _AccountScreenState createState() => _AccountScreenState();
 }
 
-class _MapScreenState extends State<MapScreen> {
-  static const _initialCameraPosition = CameraPosition(
-    target: LatLng(30.41203960806777, -91.18379484423802),
-    zoom: 13,
-  );
+class _AccountScreenState extends State<AccountScreen> {
+  late List<Deal> deals = [
+    Deal(barName: 'Freds', deal: '\$5 Drinks', picURL: 'freds.png'),
+    Deal(barName: 'Mikes', deal: 'Free Drinks', picURL: 'mikes.png'),
+    Deal(barName: 'Reggies', deal: '\$1 Shots', picURL: 'Reggies')
+  ];
+
+  void setupDeals() async {
+    deals = [
+      Deal(barName: 'Freds', deal: '\$5 Drinks', picURL: 'freds.png'),
+      Deal(barName: 'Mikes', deal: 'Free Drinks', picURL: 'mikes.png'),
+      Deal(barName: 'Reggies', deal: '\$1 Shots', picURL: 'Reggies')
+    ];
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setupDeals();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: GoogleMap(
-            myLocationButtonEnabled: false,
-            zoomControlsEnabled: false,
-            initialCameraPosition: _initialCameraPosition));
+      backgroundColor: Colors.grey[900],
+      appBar: AppBar(
+        title: Text('Profile'),
+        centerTitle: true,
+        backgroundColor: Colors.grey[850],
+        elevation: 0,
+      ),
+      body: Padding(
+        padding: EdgeInsets.fromLTRB(30.0, 20.0, 30.0, 0.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Center(
+              child: CircleAvatar(
+                backgroundImage: AssetImage('assets/user.png'),
+                radius: 40.0,
+              ),
+            ),
+            SizedBox(
+              height: 20.0,
+            ),
+            Center(
+              child: Text(
+                'LOUISIANA STATE UNIVERSITY',
+                style: TextStyle(
+                  color: Colors.grey,
+                  letterSpacing: 2.0,
+                ),
+              ),
+            ),
+            Divider(
+              height: 50.0,
+              color: Colors.grey[700],
+            ),
+
+            Text(
+              'USERNAME',
+              style: TextStyle(
+                color: Colors.grey,
+                letterSpacing: 2.0,
+              ),
+            ),
+            SizedBox(
+              height: 10.0,
+            ),
+            Text(
+              'drinkdeals_user1',
+              style: TextStyle(
+                  color: Colors.amber[200],
+                  letterSpacing: 2.0,
+                  fontSize: 22.0,
+                  fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              height: 30.0,
+            ),
+            // ignore: prefer_const_constructors
+            Text(
+              'FAVORITE DEALS',
+              style: TextStyle(
+                color: Colors.grey,
+                letterSpacing: 2.0,
+              ),
+            ),
+            SizedBox(
+              height: 20.0,
+            ),
+            Card(
+                child: ListTile(
+              onTap: () {},
+              title: Text(
+                deals[0].barName + '\t - \t' + deals[0].deal,
+              ),
+              trailing: InkWell(
+                  child: CircleAvatar(
+                backgroundImage: AssetImage('assets/freds.PNG'),
+              )),
+            )),
+            Card(
+                child: ListTile(
+              onTap: () {},
+              title: Text(deals[1].barName + '\t - \t' + deals[1].deal),
+              trailing: InkWell(
+                  child: CircleAvatar(
+                backgroundImage: AssetImage('assets/mikes.PNG'),
+              )),
+            )),
+            Card(
+              child: ListTile(
+                onTap: () {},
+                title: Text(deals[2].barName + '\t - \t' + deals[2].deal),
+                trailing: InkWell(
+                    child: CircleAvatar(
+                  backgroundImage: AssetImage('assets/reggies.PNG'),
+                )),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
