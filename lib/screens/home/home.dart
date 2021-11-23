@@ -2,6 +2,7 @@
 
 import 'package:drink_deals/services/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -15,7 +16,7 @@ class _HomeState extends State<Home> {
 
   var tabs = [
     Center(child: Text('Home')),
-    Center(child: Text('Map')),
+    MapScreen(),
     Center(child: Text('Account')),
   ];
 
@@ -68,5 +69,28 @@ class _HomeState extends State<Home> {
             });
           }),
     );
+  }
+}
+
+class MapScreen extends StatefulWidget {
+  const MapScreen({Key? key}) : super(key: key);
+
+  @override
+  _MapScreenState createState() => _MapScreenState();
+}
+
+class _MapScreenState extends State<MapScreen> {
+  static const _initialCameraPosition = CameraPosition(
+    target: LatLng(30.41203960806777, -91.18379484423802),
+    zoom: 13,
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: GoogleMap(
+            myLocationButtonEnabled: false,
+            zoomControlsEnabled: false,
+            initialCameraPosition: _initialCameraPosition));
   }
 }
