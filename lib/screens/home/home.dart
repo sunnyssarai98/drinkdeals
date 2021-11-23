@@ -6,6 +6,8 @@ import 'package:drink_deals/screens/home/deal.dart';
 import 'package:drink_deals/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:dio/dio.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -19,7 +21,7 @@ class _HomeState extends State<Home> {
 
   // Deal d1 = deals[1];
   var tabs = [
-    Center(child: Text('Home')),
+    DealsScreen(),
     MapScreen(),
     AccountScreen(),
   ];
@@ -217,15 +219,27 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> {
   static const _initialCameraPosition = CameraPosition(
     target: LatLng(30.41203960806777, -91.18379484423802),
-    zoom: 13,
+    zoom: 16,
   );
 
   late GoogleMapController _googleMapController;
+  Set<Marker> _markers = {};
 
   @override
   void dispose() {
     _googleMapController.dispose();
     super.dispose();
+  }
+
+  void _setOrigin(LatLng pos) {
+    print('test');
+    setState(() {
+      _markers.add(Marker(
+        markerId: MarkerId('origin'),
+        position: pos,
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+      ));
+    });
   }
 
   @override
@@ -235,7 +249,13 @@ class _MapScreenState extends State<MapScreen> {
         myLocationButtonEnabled: false,
         zoomControlsEnabled: false,
         initialCameraPosition: _initialCameraPosition,
-        onMapCreated: (controller) => _googleMapController = controller,
+        onMapCreated: (controller) {
+          _googleMapController = controller;
+          _googleMapController.animateCamera(
+              CameraUpdate.newCameraPosition(_initialCameraPosition));
+        },
+        markers: _markers,
+        onLongPress: _setOrigin,
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).primaryColor,
@@ -243,6 +263,41 @@ class _MapScreenState extends State<MapScreen> {
         onPressed: () => _googleMapController.animateCamera(
             CameraUpdate.newCameraPosition(_initialCameraPosition)),
         child: const Icon(Icons.center_focus_strong),
+      ),
+    );
+  }
+}
+
+class DealsScreen extends StatefulWidget {
+  const DealsScreen({Key? key}) : super(key: key);
+
+  @override
+  _DealsScreenState createState() => _DealsScreenState();
+}
+
+class _DealsScreenState extends State<DealsScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.grey[900],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(30.0, 20.0, 30.0, 0.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Card(
+                  child: ListTile(
+                onTap: () {},
+                title: Text('Freds'),
+                trailing: InkWell(
+                    child: CircleAvatar(
+                  backgroundImage: AssetImage('assets/freds.png'),
+                )),
+              )),
+            ],
+          ),
+        ),
       ),
     );
   }
