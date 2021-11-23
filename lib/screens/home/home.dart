@@ -5,6 +5,7 @@
 import 'package:drink_deals/screens/home/deal.dart';
 import 'package:drink_deals/services/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -19,7 +20,7 @@ class _HomeState extends State<Home> {
   // Deal d1 = deals[1];
   var tabs = [
     Center(child: Text('Home')),
-    Center(child: Text('Map')),
+    MapScreen(),
     AccountScreen(),
   ];
 
@@ -107,105 +108,124 @@ class _AccountScreenState extends State<AccountScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[900],
-      appBar: AppBar(
-        title: Text('Profile'),
-        centerTitle: true,
-        backgroundColor: Colors.grey[850],
-        elevation: 0,
-      ),
-      body: Padding(
-        padding: EdgeInsets.fromLTRB(30.0, 20.0, 30.0, 0.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Center(
-              child: CircleAvatar(
-                backgroundImage: AssetImage('assets/user.png'),
-                radius: 40.0,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(30.0, 20.0, 30.0, 0.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Center(
+                child: CircleAvatar(
+                  backgroundImage: AssetImage('assets/logo.png'),
+                  radius: 40.0,
+                ),
               ),
-            ),
-            SizedBox(
-              height: 20.0,
-            ),
-            Center(
-              child: Text(
-                'LOUISIANA STATE UNIVERSITY',
+              SizedBox(
+                height: 20.0,
+              ),
+              Center(
+                child: Text(
+                  'LOUISIANA STATE UNIVERSITY',
+                  style: TextStyle(
+                    color: Colors.grey,
+                    letterSpacing: 2.0,
+                  ),
+                ),
+              ),
+              Divider(
+                height: 50.0,
+                color: Colors.grey[700],
+              ),
+
+              Text(
+                'USERNAME',
                 style: TextStyle(
                   color: Colors.grey,
                   letterSpacing: 2.0,
                 ),
               ),
-            ),
-            Divider(
-              height: 50.0,
-              color: Colors.grey[700],
-            ),
-
-            Text(
-              'USERNAME',
-              style: TextStyle(
-                color: Colors.grey,
-                letterSpacing: 2.0,
+              SizedBox(
+                height: 10.0,
               ),
-            ),
-            SizedBox(
-              height: 10.0,
-            ),
-            Text(
-              'drinkdeals_user1',
-              style: TextStyle(
-                  color: Colors.amber[200],
+              Text(
+                'drinkdeals_user1',
+                style: TextStyle(
+                    color: Colors.amber[200],
+                    letterSpacing: 2.0,
+                    fontSize: 22.0,
+                    fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 30.0,
+              ),
+              // ignore: prefer_const_constructors
+              Text(
+                'FAVORITE DEALS',
+                style: TextStyle(
+                  color: Colors.grey,
                   letterSpacing: 2.0,
-                  fontSize: 22.0,
-                  fontWeight: FontWeight.bold),
-            ),
-            SizedBox(
-              height: 30.0,
-            ),
-            // ignore: prefer_const_constructors
-            Text(
-              'FAVORITE DEALS',
-              style: TextStyle(
-                color: Colors.grey,
-                letterSpacing: 2.0,
+                ),
               ),
-            ),
-            SizedBox(
-              height: 20.0,
-            ),
-            Card(
-                child: ListTile(
-              onTap: () {},
-              title: Text(
-                deals[0].barName + '\t - \t' + deals[0].deal,
+              SizedBox(
+                height: 20.0,
               ),
-              trailing: InkWell(
-                  child: CircleAvatar(
-                backgroundImage: AssetImage('assets/freds.PNG'),
-              )),
-            )),
-            Card(
-                child: ListTile(
-              onTap: () {},
-              title: Text(deals[1].barName + '\t - \t' + deals[1].deal),
-              trailing: InkWell(
-                  child: CircleAvatar(
-                backgroundImage: AssetImage('assets/mikes.PNG'),
-              )),
-            )),
-            Card(
-              child: ListTile(
+              Card(
+                  child: ListTile(
                 onTap: () {},
-                title: Text(deals[2].barName + '\t - \t' + deals[2].deal),
+                title: Text(
+                  deals[0].barName + '\t - \t' + deals[0].deal,
+                ),
                 trailing: InkWell(
                     child: CircleAvatar(
-                  backgroundImage: AssetImage('assets/reggies.PNG'),
+                  backgroundImage: AssetImage('assets/logo.png'),
                 )),
+              )),
+              Card(
+                  child: ListTile(
+                onTap: () {},
+                title: Text(deals[1].barName + '\t - \t' + deals[1].deal),
+                trailing: InkWell(
+                    child: CircleAvatar(
+                  backgroundImage: AssetImage('assets/logo.png'),
+                )),
+              )),
+              Card(
+                child: ListTile(
+                  onTap: () {},
+                  title: Text(deals[2].barName + '\t - \t' + deals[2].deal),
+                  trailing: InkWell(
+                      child: CircleAvatar(
+                    backgroundImage: AssetImage('assets/logo.png'),
+                  )),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
+  }
+}
+
+class MapScreen extends StatefulWidget {
+  const MapScreen({Key? key}) : super(key: key);
+
+  @override
+  _MapScreenState createState() => _MapScreenState();
+}
+
+class _MapScreenState extends State<MapScreen> {
+  static const _initialCameraPosition = CameraPosition(
+    target: LatLng(30.41203960806777, -91.18379484423802),
+    zoom: 13,
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: GoogleMap(
+            myLocationButtonEnabled: false,
+            zoomControlsEnabled: false,
+            initialCameraPosition: _initialCameraPosition));
   }
 }
