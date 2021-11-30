@@ -2,12 +2,14 @@
 
 // import 'dart:html';
 
+
 import 'package:drink_deals/screens/home/deal.dart';
 import 'package:drink_deals/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:dio/dio.dart';
+import 'package:drink_deals/shared/constants.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -32,7 +34,7 @@ class _HomeState extends State<Home> {
       backgroundColor: Colors.yellow[50],
       appBar: AppBar(
         title: Text('Drink Deals'),
-        backgroundColor: Colors.yellow[500],
+        backgroundColor: Color(0xffd4af37),
         foregroundColor: Colors.black87,
         elevation: 0.0,
         actions: <Widget>[
@@ -48,9 +50,9 @@ class _HomeState extends State<Home> {
       bottomNavigationBar: BottomNavigationBar(
           currentIndex: _currentIndex,
           type: BottomNavigationBarType.shifting,
-          iconSize: 27,
-          selectedFontSize: 18,
-          unselectedFontSize: 10,
+          iconSize: 20,
+          selectedFontSize: 14,
+          unselectedFontSize: 8,
           showUnselectedLabels: true,
           items: [
             BottomNavigationBarItem(
@@ -66,7 +68,7 @@ class _HomeState extends State<Home> {
             BottomNavigationBarItem(
               icon: Icon(Icons.person),
               label: "Account",
-              backgroundColor: Colors.blue,
+              backgroundColor: Colors.purple,
             ),
           ],
           onTap: (index) {
@@ -87,16 +89,16 @@ class AccountScreen extends StatefulWidget {
 
 class _AccountScreenState extends State<AccountScreen> {
   late List<Deal> deals = [
-    Deal(barName: 'Freds', deal: '\$5 Drinks', picURL: 'freds.png'),
-    Deal(barName: 'Mikes', deal: 'Free Drinks', picURL: 'mikes.png'),
-    Deal(barName: 'Reggies', deal: '\$1 Shots', picURL: 'Reggies')
+    Deal(barName: 'Freds', deal: '\$5 Drinks', picURL: 'assets/freds.png', location: LatLng(30.373199749985734, -91.17156490476393)),
+    Deal(barName: 'Mikes', deal: 'Free Drinks', picURL: 'assets/mikes.png', location: LatLng(30.39585597757133, -91.17943170225242)),
+    Deal(barName: 'Reggies', deal: '\$1 Shots', picURL: 'assets/reggies.png', location: LatLng(30.39649169335429, -91.18000358876223))
   ];
 
   void setupDeals() async {
     deals = [
-      Deal(barName: 'Freds', deal: '\$5 Drinks', picURL: 'freds.png'),
-      Deal(barName: 'Mikes', deal: 'Free Drinks', picURL: 'mikes.png'),
-      Deal(barName: 'Reggies', deal: '\$1 Shots', picURL: 'Reggies')
+      Deal(barName: 'Freds', deal: '\$5 Drinks', picURL: 'assets/freds.png', location: LatLng(30.373199749985734, -91.17156490476393)),
+      Deal(barName: 'Mikes', deal: 'Free Drinks', picURL: 'assets/mikes.png', location: LatLng(30.39585597757133, -91.17943170225242)),
+      Deal(barName: 'Reggies', deal: '\$1 Shots', picURL: 'assets/reggies.png', location: LatLng(30.39649169335429, -91.18000358876223))
     ];
   }
 
@@ -171,36 +173,23 @@ class _AccountScreenState extends State<AccountScreen> {
               SizedBox(
                 height: 20.0,
               ),
-              Card(
+              for (int i=0; i<deals.length; i++)
+                Card(
                   child: ListTile(
-                onTap: () {},
-                title: Text(
-                  deals[0].barName + '\t - \t' + deals[0].deal,
-                ),
-                trailing: InkWell(
-                    child: CircleAvatar(
-                  backgroundImage: AssetImage('assets/freds.png'),
-                )),
-              )),
-              Card(
-                  child: ListTile(
-                onTap: () {},
-                title: Text(deals[1].barName + '\t - \t' + deals[1].deal),
-                trailing: InkWell(
-                    child: CircleAvatar(
-                  backgroundImage: AssetImage('assets/mikes.png'),
-                )),
-              )),
-              Card(
-                child: ListTile(
-                  onTap: () {},
-                  title: Text(deals[2].barName + '\t - \t' + deals[2].deal),
+                  onTap: (){},
+                    
+                    // () => Navigator.push(
+                    // context,
+                    // MaterialPageRoute(builder: (context) => const MapScreen())
+                 // ),
+                  title: Text(
+                    deals[i].barName + '\t - \t' + deals[i].deal,
+                  ),
                   trailing: InkWell(
                       child: CircleAvatar(
-                    backgroundImage: AssetImage('assets/reggies.png'),
+                    backgroundImage: AssetImage(deals[i].picURL),
                   )),
-                ),
-              ),
+              )),
             ],
           ),
         ),
@@ -299,6 +288,69 @@ class _DealsScreenState extends State<DealsScreen> {
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const AddScreen())),
+        child: Text("+"),
+        backgroundColor: Colors.purple,
+      ),
     );
   }
 }
+
+class AddScreen extends StatefulWidget {
+  const AddScreen({ Key? key }) : super(key: key);
+
+  @override
+  _AddScreenState createState() => _AddScreenState();
+}
+
+class _AddScreenState extends State<AddScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.grey[900],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(30.0, 100.0, 30.0, 0.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Form(
+                child: Column(children: <Widget>[
+                    TextFormField(
+                        decoration:
+                            textInputDecoration.copyWith(hintText: 'Deal description'),
+                        validator: (val) =>
+                            val!.isEmpty ? 'Field cannot be null' : null,
+                        onChanged: (val) {
+                          String deal;
+                          setState(() => deal = val);
+                        }),
+                    SizedBox(height: 20),
+                    TextFormField(
+                        decoration:
+                            textInputDecoration.copyWith(hintText: 'Name of Location'),
+                        validator: (val) =>
+                            val!.isEmpty ? 'Field cannot be null' : null,
+                        onChanged: (val) {
+                          String barname;
+                          setState(() => barname = val);
+                        }),
+                    SizedBox(height: 20),
+                                     
+                                       
+                  ]))
+            ]),              
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: ()=> Navigator.pop(context),
+        child: Text("Return"),
+        backgroundColor: Colors.purple,
+      ),
+    );
+  }
+}
+
