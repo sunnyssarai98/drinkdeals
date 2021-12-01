@@ -2,7 +2,6 @@
 
 // import 'dart:html';
 
-
 import 'package:drink_deals/screens/home/bar.dart';
 import 'package:drink_deals/screens/home/deal.dart';
 import 'package:drink_deals/services/auth.dart';
@@ -18,10 +17,10 @@ class Home extends StatefulWidget {
 }
 
 List<Deal> deals = [
-    Deal(bar: bars[0], deal: '\$5 Drinks'),
-    Deal(bar: bars[1], deal: 'Free Drinks'),
-    Deal(bar: bars[2], deal: '\$1 Shots')
-  ];
+  Deal(bar: bars[0], deal: '\$5 Drinks'),
+  Deal(bar: bars[1], deal: 'Free Drinks'),
+  Deal(bar: bars[2], deal: '\$1 Shots')
+];
 
 class _HomeState extends State<Home> {
   final AuthService _auth = AuthService();
@@ -75,7 +74,7 @@ class _HomeState extends State<Home> {
             BottomNavigationBarItem(
               icon: Icon(Icons.person),
               label: "Account",
-              backgroundColor: Colors.purple,
+              backgroundColor: Color(0xff355c7d),
             ),
           ],
           onTap: (index) {
@@ -180,15 +179,15 @@ class _AccountScreenState extends State<AccountScreen> {
               SizedBox(
                 height: 20.0,
               ),
-              for (int i=0; i<deals.length; i++)
+              for (int i = 0; i < deals.length; i++)
                 Card(
-                  child: ListTile(
-                  onTap: (){},
-                    
-                    // () => Navigator.push(
-                    // context,
-                    // MaterialPageRoute(builder: (context) => const MapScreen())
-                 // ),
+                    child: ListTile(
+                  onTap: () {},
+
+                  // () => Navigator.push(
+                  // context,
+                  // MaterialPageRoute(builder: (context) => const MapScreen())
+                  // ),
                   title: Text(
                     deals[i].bar.barName + '\t - \t' + deals[i].deal,
                   ),
@@ -196,7 +195,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       child: CircleAvatar(
                     backgroundImage: AssetImage(deals[i].bar.picURL),
                   )),
-              )),
+                )),
             ],
           ),
         ),
@@ -282,15 +281,15 @@ class _DealsScreenState extends State<DealsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-            for (int i=0; i<deals.length; i++)
+              for (int i = 0; i < deals.length; i++)
                 Card(
-                  child: ListTile(
-                  onTap: (){},
-                    
-                    // () => Navigator.push(
-                    // context,
-                    // MaterialPageRoute(builder: (context) => const MapScreen())
-                 // ),
+                    child: ListTile(
+                  onTap: () {},
+
+                  // () => Navigator.push(
+                  // context,
+                  // MaterialPageRoute(builder: (context) => const MapScreen())
+                  // ),
                   title: Text(
                     deals[i].bar.barName + '\t - \t' + deals[i].deal,
                   ),
@@ -298,15 +297,14 @@ class _DealsScreenState extends State<DealsScreen> {
                       child: CircleAvatar(
                     backgroundImage: AssetImage(deals[i].bar.picURL),
                   )),
-              )),
+                )),
             ],
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const AddScreen())),
+        onPressed: () => Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const AddScreen())),
         child: Text("+"),
         backgroundColor: Colors.purple,
       ),
@@ -315,20 +313,19 @@ class _DealsScreenState extends State<DealsScreen> {
 }
 
 class AddScreen extends StatefulWidget {
-  const AddScreen({ Key? key }) : super(key: key);
+  const AddScreen({Key? key}) : super(key: key);
 
   @override
   _AddScreenState createState() => _AddScreenState();
 }
-List<DropdownMenuItem<String>> get dropdownItems{
+
+List<DropdownMenuItem<String>> get dropdownItems {
   List<DropdownMenuItem<String>> menuItems = [
-    for (int i=0; i<bars.length; i++)
-      DropdownMenuItem(child: Text(bars[i].barName),value: bars[i].barName),
+    for (int i = 0; i < bars.length; i++)
+      DropdownMenuItem(child: Text(bars[i].barName), value: bars[i].barName),
   ];
   return menuItems;
 }
-
-
 
 class _AddScreenState extends State<AddScreen> {
   String? value;
@@ -343,48 +340,45 @@ class _AddScreenState extends State<AddScreen> {
         child: Padding(
           padding: EdgeInsets.fromLTRB(30.0, 100.0, 30.0, 0.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Form(
-                child: Column(children: <Widget>[
-                    TextFormField(
-                        decoration:
-                            textInputDecoration.copyWith(hintText: 'Deal description'),
-                        validator: (val) =>
-                            val!.isEmpty ? 'Field cannot be null' : null,
-                        onChanged: (val) {
-                          setState(() => newdeal = val);
-                        }),
-                    SizedBox(height: 20),
-                    Container(
-                      color: Colors.white,
-                      margin: EdgeInsets.all(16),
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Form(
+                    child: Column(children: <Widget>[
+                  TextFormField(
+                      decoration: textInputDecoration.copyWith(
+                          hintText: 'Deal description'),
+                      validator: (val) =>
+                          val!.isEmpty ? 'Field cannot be null' : null,
+                      onChanged: (val) {
+                        setState(() => newdeal = val);
+                      }),
+                  SizedBox(height: 20),
+                  Container(
+                    color: Colors.white,
+                    margin: EdgeInsets.all(16),
                     child: DropdownButton<String>(
                       value: value,
                       items: dropdownItems,
                       onChanged: (value) => this.value = value,
                       dropdownColor: Colors.white,
                       iconEnabledColor: Colors.black,
-                      
-                      ),
                     ),
-                    Container(
-                      child: ElevatedButton(
-                          child: Text("Add"),
-                          onPressed: 
-                            () => Navigator.pop(context),
-                      ),
-                    )
-                  ]))
-            ]),              
+                  ),
+                  Container(
+                    child: ElevatedButton(
+                      child: Text("Add"),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  )
+                ]))
+              ]),
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: ()=> Navigator.pop(context),
+        onPressed: () => Navigator.pop(context),
         child: Text("Return"),
         backgroundColor: Colors.purple,
       ),
     );
   }
 }
-
