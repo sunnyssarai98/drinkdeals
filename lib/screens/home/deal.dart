@@ -1,10 +1,7 @@
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-
+import 'package:drink_deals/screens/home/bar.dart';
 class Deal {
-  String barName;
   String deal;
-  String picURL;
-  LatLng location;
+  Bar bar;
 
-  Deal({required this.barName, required this.deal, required this.picURL, required this.location});
+  Deal({required this.bar, required this.deal});
 }

@@ -1,8 +1,9 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_typing_uninitialized_variables
 
 // import 'dart:html';
 
 
+import 'package:drink_deals/screens/home/bar.dart';
 import 'package:drink_deals/screens/home/deal.dart';
 import 'package:drink_deals/services/auth.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,12 @@ class Home extends StatefulWidget {
   @override
   State<Home> createState() => _HomeState();
 }
+
+List<Deal> deals = [
+    Deal(bar: bars[0], deal: '\$5 Drinks'),
+    Deal(bar: bars[1], deal: 'Free Drinks'),
+    Deal(bar: bars[2], deal: '\$1 Shots')
+  ];
 
 class _HomeState extends State<Home> {
   final AuthService _auth = AuthService();
@@ -88,24 +95,24 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
-  late List<Deal> deals = [
-    Deal(barName: 'Freds', deal: '\$5 Drinks', picURL: 'assets/freds.png', location: LatLng(30.373199749985734, -91.17156490476393)),
-    Deal(barName: 'Mikes', deal: 'Free Drinks', picURL: 'assets/mikes.png', location: LatLng(30.39585597757133, -91.17943170225242)),
-    Deal(barName: 'Reggies', deal: '\$1 Shots', picURL: 'assets/reggies.png', location: LatLng(30.39649169335429, -91.18000358876223))
-  ];
+  // late List<Deal> deals = [
+  //   Deal(bar: bars[0], deal: '\$5 Drinks'),
+  //   Deal(bar: bars[1], deal: 'Free Drinks'),
+  //   Deal(bar: bars[2], deal: '\$1 Shots')
+  // ];
 
-  void setupDeals() async {
-    deals = [
-      Deal(barName: 'Freds', deal: '\$5 Drinks', picURL: 'assets/freds.png', location: LatLng(30.373199749985734, -91.17156490476393)),
-      Deal(barName: 'Mikes', deal: 'Free Drinks', picURL: 'assets/mikes.png', location: LatLng(30.39585597757133, -91.17943170225242)),
-      Deal(barName: 'Reggies', deal: '\$1 Shots', picURL: 'assets/reggies.png', location: LatLng(30.39649169335429, -91.18000358876223))
-    ];
-  }
+  // void setupDeals() async {
+  //   deals = [
+  //     Deal(bar: bars[0], deal: '\$5 Drinks'),
+  //     Deal(bar: bars[1], deal: 'Free Drinks'),
+  //     Deal(bar: bars[2], deal: '\$1 Shots')
+  //   ];
+  // }
 
   @override
   void initState() {
     super.initState();
-    setupDeals();
+    //setupDeals();
   }
 
   @override
@@ -183,11 +190,11 @@ class _AccountScreenState extends State<AccountScreen> {
                     // MaterialPageRoute(builder: (context) => const MapScreen())
                  // ),
                   title: Text(
-                    deals[i].barName + '\t - \t' + deals[i].deal,
+                    deals[i].bar.barName + '\t - \t' + deals[i].deal,
                   ),
                   trailing: InkWell(
                       child: CircleAvatar(
-                    backgroundImage: AssetImage(deals[i].picURL),
+                    backgroundImage: AssetImage(deals[i].bar.picURL),
                   )),
               )),
             ],
@@ -275,14 +282,22 @@ class _DealsScreenState extends State<DealsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Card(
+            for (int i=0; i<deals.length; i++)
+                Card(
                   child: ListTile(
-                onTap: () {},
-                title: Text('Freds'),
-                trailing: InkWell(
-                    child: CircleAvatar(
-                  backgroundImage: AssetImage('assets/freds.png'),
-                )),
+                  onTap: (){},
+                    
+                    // () => Navigator.push(
+                    // context,
+                    // MaterialPageRoute(builder: (context) => const MapScreen())
+                 // ),
+                  title: Text(
+                    deals[i].bar.barName + '\t - \t' + deals[i].deal,
+                  ),
+                  trailing: InkWell(
+                      child: CircleAvatar(
+                    backgroundImage: AssetImage(deals[i].bar.picURL),
+                  )),
               )),
             ],
           ),
@@ -305,8 +320,21 @@ class AddScreen extends StatefulWidget {
   @override
   _AddScreenState createState() => _AddScreenState();
 }
+List<DropdownMenuItem<String>> get dropdownItems{
+  List<DropdownMenuItem<String>> menuItems = [
+    for (int i=0; i<bars.length; i++)
+      DropdownMenuItem(child: Text(bars[i].barName),value: bars[i].barName),
+  ];
+  return menuItems;
+}
+
+
 
 class _AddScreenState extends State<AddScreen> {
+  String? value;
+
+  late String newdeal;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -325,22 +353,28 @@ class _AddScreenState extends State<AddScreen> {
                         validator: (val) =>
                             val!.isEmpty ? 'Field cannot be null' : null,
                         onChanged: (val) {
-                          String deal;
-                          setState(() => deal = val);
+                          setState(() => newdeal = val);
                         }),
                     SizedBox(height: 20),
-                    TextFormField(
-                        decoration:
-                            textInputDecoration.copyWith(hintText: 'Name of Location'),
-                        validator: (val) =>
-                            val!.isEmpty ? 'Field cannot be null' : null,
-                        onChanged: (val) {
-                          String barname;
-                          setState(() => barname = val);
-                        }),
-                    SizedBox(height: 20),
-                                     
-                                       
+                    Container(
+                      color: Colors.white,
+                      margin: EdgeInsets.all(16),
+                    child: DropdownButton<String>(
+                      value: value,
+                      items: dropdownItems,
+                      onChanged: (value) => this.value = value,
+                      dropdownColor: Colors.white,
+                      iconEnabledColor: Colors.black,
+                      
+                      ),
+                    ),
+                    Container(
+                      child: ElevatedButton(
+                          child: Text("Add"),
+                          onPressed: 
+                            () => Navigator.pop(context),
+                      ),
+                    )
                   ]))
             ]),              
         ),
