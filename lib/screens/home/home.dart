@@ -37,11 +37,11 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.yellow[50],
+      backgroundColor: Color(0xff1d3752),
       appBar: AppBar(
         title: Text('Drink Deals'),
-        backgroundColor: Color(0xffd4af37),
-        foregroundColor: Colors.black87,
+        backgroundColor: Color(0xff1d3752),
+        foregroundColor: Colors.white,
         elevation: 0.0,
         actions: <Widget>[
           TextButton.icon(
@@ -64,17 +64,17 @@ class _HomeState extends State<Home> {
             BottomNavigationBarItem(
               icon: Icon(Icons.list),
               label: "List",
-              backgroundColor: Colors.green,
+              backgroundColor: Color(0xff214d72),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.map),
               label: "Map",
-              backgroundColor: Colors.red,
+              backgroundColor: Color(0xff2c7695),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person),
               label: "Account",
-              backgroundColor: Color(0xff355c7d),
+              backgroundColor: Color(0xff50bfc3),
             ),
           ],
           onTap: (index) {
@@ -305,8 +305,11 @@ class _DealsScreenState extends State<DealsScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.push(context,
             MaterialPageRoute(builder: (context) => const AddScreen())),
-        child: Text("+"),
-        backgroundColor: Colors.purple,
+        child: Text(
+          "+",
+          style: TextStyle(fontSize: 20),
+        ),
+        backgroundColor: Color(0xfff7c232),
       ),
     );
   }
@@ -377,7 +380,7 @@ class _AddScreenState extends State<AddScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.pop(context),
         child: Text("Return"),
-        backgroundColor: Colors.purple,
+        backgroundColor: Color(0xfff7c232),
       ),
     );
   }
