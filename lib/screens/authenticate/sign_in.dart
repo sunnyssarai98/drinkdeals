@@ -51,61 +51,63 @@ class _SignInState extends State<SignIn> {
                 flex: 1,
                 child: Form(
                     key: _formKey,
-                    child: Column(children: <Widget>[
-                      TextFormField(
-                          decoration: InputDecoration(
-                              filled: true,
-                              fillColor: Color(0xfff3f3f3),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              hintText: 'username'),
-                          validator: (val) =>
-                              val!.isEmpty ? 'Please enter an e-mail' : null,
-                          onChanged: (val) {
-                            setState(() => email = val);
-                          }),
-                      SizedBox(height: 20),
-                      TextFormField(
-                          decoration: InputDecoration(
-                              filled: true,
-                              fillColor: Color(0xfff3f3f3),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              hintText: 'password'),
-                          obscureText: true,
-                          validator: (val) => val!.length < 7
-                              ? 'Please enter a password with 7+ characters'
-                              : null,
-                          onChanged: (val) {
-                            setState(() => password = val);
-                          }),
-                      SizedBox(height: 20),
-                      ElevatedButton(
-                        child: Text('sign in'),
-                        style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Color(0xfff7c232)),
-                            textStyle: MaterialStateProperty.all(
-                                TextStyle(color: Colors.white))),
-                        onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
-                            dynamic result = await _auth
-                                .signInWithEmailAndPassword(email, password);
-                            if (result == null) {
-                              setState(() => errorMSG =
-                                  'Could not sign in with email/username.');
+                    child: SingleChildScrollView(
+                      child: Column(children: <Widget>[
+                        TextFormField(
+                            decoration: InputDecoration(
+                                filled: true,
+                                fillColor: Color(0xfff3f3f3),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                hintText: 'username'),
+                            validator: (val) =>
+                                val!.isEmpty ? 'Please enter an e-mail' : null,
+                            onChanged: (val) {
+                              setState(() => email = val);
+                            }),
+                        SizedBox(height: 20),
+                        TextFormField(
+                            decoration: InputDecoration(
+                                filled: true,
+                                fillColor: Color(0xfff3f3f3),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                hintText: 'password'),
+                            obscureText: true,
+                            validator: (val) => val!.length < 7
+                                ? 'Please enter a password with 7+ characters'
+                                : null,
+                            onChanged: (val) {
+                              setState(() => password = val);
+                            }),
+                        SizedBox(height: 20),
+                        ElevatedButton(
+                          child: Text('sign in'),
+                          style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(Color(0xfff7c232)),
+                              textStyle: MaterialStateProperty.all(
+                                  TextStyle(color: Colors.white))),
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              dynamic result = await _auth
+                                  .signInWithEmailAndPassword(email, password);
+                              if (result == null) {
+                                setState(() => errorMSG =
+                                    'Could not sign in with email/username.');
+                              }
                             }
-                          }
-                        },
-                      ),
-                      SizedBox(height: 12.0),
-                      Text(
-                        errorMSG,
-                        style: TextStyle(color: Colors.red, fontSize: 20),
-                      )
-                    ])),
+                          },
+                        ),
+                        SizedBox(height: 12.0),
+                        Text(
+                          errorMSG,
+                          style: TextStyle(color: Colors.red, fontSize: 20),
+                        )
+                      ]),
+                    )),
               ),
               ElevatedButton(
                   child: Text('Continue as guest'),

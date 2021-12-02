@@ -22,13 +22,12 @@ class _RegisterState extends State<Register> {
   //Register Card Text
   String mainText_1 = "TO CREATE AN ACCOUNT:";
   String bulletPoints_1 =
-      "\t- Valid e-mail \n\t- Password (7 characters minimum)";
+      "\t- Use a valid e-mail address. \n\t- Password (7 characters minimum)";
 
   Widget registerCardTemplate(mainText, bulletPoints) {
     return Card(
-      margin: EdgeInsets.fromLTRB(16.0, 50.0, 16.0, 120),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 35),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
         child: Column(children: <Widget>[
           Text(mainText,
               style: TextStyle(
@@ -74,84 +73,72 @@ class _RegisterState extends State<Register> {
               //     image: AssetImage('assets/logo.png'),
               //   ),
               // ),
-              Expanded(
-                  flex: 1,
-                  child: registerCardTemplate(mainText_1, bulletPoints_1)),
-              //const SizedBox(height: 25.0),
+              const SizedBox(height: 25.0),
+              registerCardTemplate(mainText_1, bulletPoints_1),
+              const SizedBox(height: 25.0),
               Expanded(
                 flex: 1,
                 child: Form(
                     key: _formKey,
-                    child: Column(children: <Widget>[
-                      TextFormField(
-                          decoration: InputDecoration(
-                              filled: true,
-                              fillColor: Color(0xfff3f3f3),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              hintText: 'username'),
-                          validator: (val) =>
-                              val!.isEmpty ? 'Please enter an e-mail' : null,
-                          onChanged: (val) {
-                            setState(() => email = val);
-                          }),
-                      SizedBox(height: 20),
-                      TextFormField(
-                          decoration: InputDecoration(
-                              filled: true,
-                              fillColor: Color(0xfff3f3f3),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              hintText: 'password'),
-                          obscureText: true,
-                          validator: (val) => val!.length < 7
-                              ? 'Please enter a password with 7+ characters'
-                              : null,
-                          onChanged: (val) {
-                            setState(() => password = val);
-                          }),
-                      SizedBox(height: 20),
-                      ElevatedButton(
-                        child: Text('register'),
-                        style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Color(0xfff7c232)),
-                            textStyle: MaterialStateProperty.all(
-                                TextStyle(color: Colors.white))),
-                        onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
-                            dynamic result = await _auth
-                                .registerWithEmailAndPassword(email, password);
-                            if (result == null) {
-                              setState(
-                                  () => errorMSG = 'please use a valid email.');
+                    child: SingleChildScrollView(
+                      child: Column(children: <Widget>[
+                        TextFormField(
+                            decoration: InputDecoration(
+                                filled: true,
+                                fillColor: Color(0xfff3f3f3),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                hintText: 'username'),
+                            validator: (val) =>
+                                val!.isEmpty ? 'Please enter an e-mail' : null,
+                            onChanged: (val) {
+                              setState(() => email = val);
+                            }),
+                        SizedBox(height: 20),
+                        TextFormField(
+                            decoration: InputDecoration(
+                                filled: true,
+                                fillColor: Color(0xfff3f3f3),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                hintText: 'password'),
+                            obscureText: true,
+                            validator: (val) => val!.length < 7
+                                ? 'Please enter a password with 7+ characters'
+                                : null,
+                            onChanged: (val) {
+                              setState(() => password = val);
+                            }),
+                        SizedBox(height: 20),
+                        ElevatedButton(
+                          child: Text('register'),
+                          style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(Color(0xfff7c232)),
+                              textStyle: MaterialStateProperty.all(
+                                  TextStyle(color: Colors.white))),
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              dynamic result =
+                                  await _auth.registerWithEmailAndPassword(
+                                      email, password);
+                              if (result == null) {
+                                setState(() =>
+                                    errorMSG = 'please use a valid email.');
+                              }
                             }
-                          }
-                        },
-                      ),
-                      SizedBox(height: 12.0),
-                      Text(
-                        errorMSG,
-                        style: TextStyle(color: Colors.red, fontSize: 20),
-                      )
-                    ])),
+                          },
+                        ),
+                        SizedBox(height: 12.0),
+                        Text(
+                          errorMSG,
+                          style: TextStyle(color: Colors.red, fontSize: 20),
+                        )
+                      ]),
+                    )),
               ),
-              ElevatedButton(
-                  child: Text('Continue as guest'),
-                  style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(Color(0xff214d72))),
-                  onPressed: () async {
-                    dynamic result = await _auth.signInAnon();
-                    if (result == null) {
-                      print('error signing in');
-                    } else {
-                      print('signed in');
-                      print(result);
-                    }
-                  }),
             ],
           )),
     );
