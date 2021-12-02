@@ -60,7 +60,7 @@ class _SignInState extends State<SignIn> {
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(25),
                                 ),
-                                hintText: 'username'),
+                                hintText: 'e-mail'),
                             validator: (val) =>
                                 val!.isEmpty ? 'Please enter an e-mail' : null,
                             onChanged: (val) {

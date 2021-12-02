@@ -10,6 +10,16 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:dio/dio.dart';
 import 'package:drink_deals/shared/constants.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:drink_deals/.env.dart';
+
+// Set<Marker> markers = {};
+Marker origin = Marker(markerId: MarkerId('origin'));
+Marker destination = Marker(markerId: MarkerId('destination'));
+Map<PolylineId, Polyline> polylines = {};
+List<LatLng> polylineCoordinates = [];
+PolylinePoints polylinePoints = PolylinePoints();
+String apiKEY = googleAPIKey;
 
 class Home extends StatefulWidget {
   @override
@@ -148,7 +158,7 @@ class _AccountScreenState extends State<AccountScreen> {
               ),
 
               Text(
-                'USERNAME',
+                'User:',
                 style: TextStyle(
                   color: Colors.grey,
                   letterSpacing: 2.0,
@@ -158,7 +168,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 height: 10.0,
               ),
               Text(
-                'drinkdeals_user1',
+                'sunnyssarai98@gmail.com',
                 style: TextStyle(
                     color: Colors.amber[200],
                     letterSpacing: 2.0,
@@ -212,13 +222,39 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
+  late Position currentPosition;
+  var geoLocator = Geolocator();
+  late GoogleMapController _googleMapController;
+
+  void locatePosition() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.best);
+    currentPosition = position;
+
+    LatLng latlngCurrentPosition =
+        LatLng(position.latitude, position.longitude);
+
+    CameraPosition cameraPosition =
+        new CameraPosition(target: latlngCurrentPosition, zoom: 18);
+    _googleMapController
+        .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+
+    setState(() {
+      origin = Marker(
+          markerId: MarkerId('origin'),
+          infoWindow: InfoWindow(
+              title: 'Origin', snippet: 'Where your journey begins!'),
+          icon:
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow),
+          position: LatLng(30.4072, -91.1798));
+    });
+    _getPolyline();
+  }
+
   static const _initialCameraPosition = CameraPosition(
     target: LatLng(30.41203960806777, -91.18379484423802),
     zoom: 16,
   );
-
-  late GoogleMapController _googleMapController;
-  Set<Marker> _markers = {};
 
   @override
   void dispose() {
@@ -226,39 +262,69 @@ class _MapScreenState extends State<MapScreen> {
     super.dispose();
   }
 
-  void _setOrigin(LatLng pos) {
-    print('test');
+  void _setOrigin(LatLng pos) async {
     setState(() {
-      _markers.add(Marker(
-        markerId: MarkerId('origin'),
-        position: pos,
-        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
-      ));
+      origin = Marker(
+          markerId: MarkerId('origin'),
+          infoWindow: InfoWindow(
+              title: 'Origin', snippet: 'Where your journey begins!'),
+          icon:
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow),
+          position: pos);
     });
+  }
+
+  _addPolyLine() {
+    PolylineId id = PolylineId("poly");
+    Polyline polyline = Polyline(
+        polylineId: id, color: Colors.red, points: polylineCoordinates);
+    polylines[id] = polyline;
+    setState(() {});
+  }
+
+  _getPolyline() async {
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+        googleAPIKey,
+        PointLatLng(30.41203960806777, -91.18379484423802),
+        PointLatLng(30.41203960806777, -91.18479484423802),
+        travelMode: TravelMode.driving,
+        wayPoints: [PolylineWayPoint(location: "Tiger Stadium")]);
+    if (result.points.isNotEmpty) {
+      for (var point in result.points) {
+        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+      }
+    }
+    _addPolyLine();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: GoogleMap(
+        mapType: MapType.hybrid,
+        myLocationEnabled: true,
         myLocationButtonEnabled: false,
-        zoomControlsEnabled: false,
+        zoomControlsEnabled: true,
         initialCameraPosition: _initialCameraPosition,
         onMapCreated: (controller) {
           _googleMapController = controller;
           _googleMapController.animateCamera(
               CameraUpdate.newCameraPosition(_initialCameraPosition));
         },
-        markers: _markers,
+        markers: {
+          if (origin != null) origin,
+          if (destination != null) destination,
+        },
+        polylines: Set<Polyline>.of(polylines.values),
         onLongPress: _setOrigin,
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).primaryColor,
         foregroundColor: Colors.black,
-        onPressed: () => _googleMapController.animateCamera(
-            CameraUpdate.newCameraPosition(_initialCameraPosition)),
+        onPressed: () => locatePosition(),
         child: const Icon(Icons.center_focus_strong),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniStartFloat,
     );
   }
 }
@@ -271,6 +337,17 @@ class DealsScreen extends StatefulWidget {
 }
 
 class _DealsScreenState extends State<DealsScreen> {
+  void setDestination() async {
+    setState(() {
+      destination = Marker(
+          markerId: MarkerId('destination'),
+          infoWindow: InfoWindow(
+              title: 'Destination', snippet: 'Your beaverage awaits!'),
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan),
+          position: LatLng(30.39613, -91.17951));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -284,12 +361,7 @@ class _DealsScreenState extends State<DealsScreen> {
               for (int i = 0; i < deals.length; i++)
                 Card(
                     child: ListTile(
-                  onTap: () {},
-
-                  // () => Navigator.push(
-                  // context,
-                  // MaterialPageRoute(builder: (context) => const MapScreen())
-                  // ),
+                  onTap: () => setDestination(),
                   title: Text(
                     deals[i].bar.barName + '\t - \t' + deals[i].deal,
                   ),
